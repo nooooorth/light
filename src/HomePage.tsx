@@ -28,60 +28,6 @@ function HomePage() {
           <span>开始</span>
         </Button>
       </main>
-      <style>
-        {`
-          @keyframes page-fade-in {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-          }
-          .animate-page-fade-in {
-            animation: page-fade-in 0.3s ease-out forwards;
-          }
-          @keyframes fade-in-down {
-            0% {
-              opacity: 0;
-              transform: translateY(-20px);
-            }
-            100% {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-          @keyframes fade-in-up {
-            0% {
-              opacity: 0;
-              transform: translateY(20px);
-            }
-            100% {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-          @keyframes fade-in {
-            0% {
-              opacity: 0;
-            }
-            100% {
-              opacity: 1;
-            }
-          }
-          .animate-fade-in-down {
-            animation: fade-in-down 0.8s ease-out forwards;
-          }
-          .animate-fade-in-up {
-            animation: fade-in-up 0.8s ease-out forwards;
-          }
-          .animate-fade-in {
-            animation: fade-in 1s ease-out forwards;
-          }
-          .animation-delay-300 {
-            animation-delay: 0.3s;
-          }
-          .animation-delay-600 {
-            animation-delay: 0.6s;
-          }
-        `}
-      </style>
     </div>
   );
 }
