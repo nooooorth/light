@@ -1,0 +1,77 @@
+/* 页面准备完成后的状态 */
+.ready [class*='animate-'] {
+  will-change: opacity, transform;
+}
+
+/* 动画预加载状态 - 阻止所有动画 */
+.preload * {
+  animation: none !important;
+  opacity: 0 !important;
+  transition: none !important;
+}
+
+/* 初始隐藏所有动画元素 */
+[class*='animate-'] {
+  opacity: 0;
+}
+
+/* 页面淡入动画 */
+@keyframes page-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-page-fade-in {
+  animation: page-fade-in 0.3s ease-out forwards;
+}
+
+/* 从上往下淡入 */
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-down {
+  animation: fade-in-down 0.8s ease-out forwards;
+}
+
+/* 从下往上淡入 */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+}
+
+/* 普通淡入 */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-out forwards;
+}
+
+/* 动画延迟 */
+.animation-delay-300 {
+  animation-delay: 0.3s;
+}
+
+.animation-delay-600 {
+  animation-delay: 0.6s;
+}
