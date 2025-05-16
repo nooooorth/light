@@ -86,45 +86,50 @@ function EncouragementPage() {
   };
 
   const handleSaveAsImage = () => {
-    if (pageRef.current) {
-      const page = pageRef.current;
-      const actionBar = page.querySelector('.action-bar') as HTMLElement | null;
-      let actionBarDisplay = '';
-      if (actionBar) {
-        actionBarDisplay = actionBar.style.display;
-        actionBar.style.display = 'none';
-      }
-      // 移除动画类，避免截图时内容透明
-      const animatedEls = page.querySelectorAll('[class*="animate-"]');
-      const originalClassNames: string[] = [];
-      animatedEls.forEach((el, idx) => {
-        originalClassNames[idx] = el.className;
-        el.className = el.className.replace(/animate-[^\s]+/g, '');
-      });
-      html2canvas(page, {
-        useCORS: true,
-        backgroundColor: null,
-      }).then(canvas => {
-        if (actionBar) actionBar.style.display = actionBarDisplay;
-        animatedEls.forEach((el, idx) => {
-          el.className = originalClassNames[idx];
-        });
-        const image = canvas.toDataURL('image/png');
-        const link = document.createElement('a');
-        link.href = image;
-        link.download = 'dianliang-quote.png';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }).catch(err => {
-        if (actionBar) actionBar.style.display = actionBarDisplay;
-        animatedEls.forEach((el, idx) => {
-          el.className = originalClassNames[idx];
-        });
-        console.error('图片生成失败：', err);
-        alert('抱歉，生成图片失败，请稍后再试。');
-      });
-    }
+    // 生成一个只包含背景和鼓励语的隐藏节点用于截图
+    const bg = gradient1;
+    const temp = document.createElement('div');
+    temp.style.position = 'fixed';
+    temp.style.left = '0';
+    temp.style.top = '0';
+    temp.style.width = '800px';
+    temp.style.height = '800px';
+    temp.style.background = bg;
+    temp.style.display = 'flex';
+    temp.style.flexDirection = 'column';
+    temp.style.justifyContent = 'center';
+    temp.style.alignItems = 'center';
+    temp.style.zIndex = '9999';
+    temp.style.color = 'white';
+    temp.style.fontFamily = 'inherit';
+    temp.innerHTML = `
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
+        <span style="font-size:2.5rem;font-weight:bold;text-align:center;line-height:1.4;text-shadow:0 2px 8px rgba(0,0,0,0.25);max-width:90%;word-break:break-all;">${quote}</span>
+      </div>
+      <div style="position:absolute;right:32px;bottom:32px;font-size:1rem;opacity:0.7;letter-spacing:2px;">来自点亮</div>
+    `;
+    document.body.appendChild(temp);
+    html2canvas(temp, {
+      useCORS: true,
+      backgroundColor: null,
+      width: 800,
+      height: 800,
+      windowWidth: 800,
+      windowHeight: 800,
+    }).then(canvas => {
+      document.body.removeChild(temp);
+      const image = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = image;
+      link.download = 'dianliang-quote.png';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }).catch(err => {
+      document.body.removeChild(temp);
+      console.error('图片生成失败：', err);
+      alert('抱歉，生成图片失败，请稍后再试。');
+    });
   };
 
   const commonBackgroundLayerStyle: React.CSSProperties = {
