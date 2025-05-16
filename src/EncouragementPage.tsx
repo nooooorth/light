@@ -1,7 +1,23 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { getRandomQuote } from './quotes'; // Ensure quotes.ts is also localized
 import { RefreshCw, Share2, Download } from 'lucide-react';
 import html2canvas from 'html2canvas';
+
+const gradientDirections = [
+  'to bottom right',
+  'to top left',
+  'to bottom left',
+  'to top right',
+  'to right',
+  'to left',
+  'to top',
+  'to bottom',
+  '135deg',
+  '225deg',
+  '45deg',
+  '315deg',
+];
 
 const generateRandomGradient = () => {
   const hue1 = Math.floor(Math.random() * 360);
@@ -11,12 +27,16 @@ const generateRandomGradient = () => {
   const lightness2 = Math.floor(Math.random() * 20) + 30;
   const color1 = `hsl(${hue1}, ${saturation}%, ${lightness1}%)`;
   const color2 = `hsl(${hue2}, ${saturation}%, ${lightness2}%)`;
-  return `linear-gradient(135deg, ${color1}, ${color2})`;
+  const direction = gradientDirections[Math.floor(Math.random() * gradientDirections.length)];
+  return `linear-gradient(${direction}, ${color1}, ${color2})`;
 };
 
 function EncouragementPage() {
+  const location = useLocation();
+  // 优先使用首页传递的渐变色
+  const initialGradient = location.state && location.state.bg ? location.state.bg : generateRandomGradient();
   const [quote, setQuote] = useState('');
-  const [gradient1, setGradient1] = useState(generateRandomGradient());
+  const [gradient1, setGradient1] = useState(initialGradient);
   const [gradient2, setGradient2] = useState(generateRandomGradient());
   const [opacity1, setOpacity1] = useState(1);
   const [opacity2, setOpacity2] = useState(0);
@@ -67,20 +87,40 @@ function EncouragementPage() {
 
   const handleSaveAsImage = () => {
     if (pageRef.current) {
-      html2canvas(pageRef.current, {
+      const page = pageRef.current;
+      const actionBar = page.querySelector('.action-bar') as HTMLElement | null;
+      let actionBarDisplay = '';
+      if (actionBar) {
+        actionBarDisplay = actionBar.style.display;
+        actionBar.style.display = 'none';
+      }
+      // 移除动画类，避免截图时内容透明
+      const animatedEls = page.querySelectorAll('[class*="animate-"]');
+      const originalClassNames: string[] = [];
+      animatedEls.forEach((el, idx) => {
+        originalClassNames[idx] = el.className;
+        el.className = el.className.replace(/animate-[^\s]+/g, '');
+      });
+      html2canvas(page, {
         useCORS: true,
         backgroundColor: null,
-        onclone: (_document) => { // Changed 'document' to '_document' to indicate unused
-        }
       }).then(canvas => {
+        if (actionBar) actionBar.style.display = actionBarDisplay;
+        animatedEls.forEach((el, idx) => {
+          el.className = originalClassNames[idx];
+        });
         const image = canvas.toDataURL('image/png');
         const link = document.createElement('a');
         link.href = image;
-        link.download = 'dianliang-quote.png'; // Consider localizing filename if needed
+        link.download = 'dianliang-quote.png';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
       }).catch(err => {
+        if (actionBar) actionBar.style.display = actionBarDisplay;
+        animatedEls.forEach((el, idx) => {
+          el.className = originalClassNames[idx];
+        });
         console.error('图片生成失败：', err);
         alert('抱歉，生成图片失败，请稍后再试。');
       });
@@ -120,11 +160,17 @@ function EncouragementPage() {
         style={{backgroundColor: 'rgba(0,0,0,0.2)'}} 
       ></div>
 
-      <h1 className="text-4xl font-bold mb-8 text-shadow-lg animate-fade-in-down z-10">鼓励你的话</h1>
-      <p className="text-2xl text-center mb-12 min-h-[100px] flex items-center justify-center text-shadow-md animate-fade-in animation-delay-300 z-10">
-        {quote}
-      </p>
-      <div className="flex space-x-4 animate-fade-in-up animation-delay-600 z-10">
+      <h1 className="text-1xl font-bold mt-8 mb-6 text-shadow-lg animate-fade-in-down z-10 opacity-60 select-none pointer-events-none">Hi, 这世界总有人爱你</h1>
+      <div className="flex-1 flex flex-col justify-center items-center w-full">
+        <div className="w-full max-w-xl mx-auto z-10 flex-1 flex flex-col justify-center">
+          <div className="backdrop-blur-md bg-white/10 border border-white/30 rounded-2xl shadow-xl px-8 py-10 flex items-center justify-center min-h-[120px] transition-all duration-300 border-dashed hover:border-solid hover:border-blue-300/60 group">
+            <p className="text-2xl text-center font-semibold text-shadow-md text-white drop-shadow-lg select-text">
+              {quote}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="flex space-x-4 animate-fade-in-up animation-delay-600 z-10 action-bar mt-auto mb-8">
         <button 
           onClick={handleRefresh}
           aria-label="刷新鼓励语和背景"
