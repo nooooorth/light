@@ -22,9 +22,10 @@ const gradientDirections = [
 const generateRandomGradient = () => {
   const hue1 = Math.floor(Math.random() * 360);
   const hue2 = (hue1 + Math.floor(Math.random() * 120) + 120) % 360;
-  const saturation = Math.floor(Math.random() * 30) + 70;
-  const lightness1 = Math.floor(Math.random() * 20) + 20;
-  const lightness2 = Math.floor(Math.random() * 20) + 30;
+  // 柔和浅色：饱和度 40-60%，亮度 85-95%
+  const saturation = Math.floor(Math.random() * 20) + 40;
+  const lightness1 = Math.floor(Math.random() * 10) + 85;
+  const lightness2 = Math.floor(Math.random() * 10) + 85;
   const color1 = `hsl(${hue1}, ${saturation}%, ${lightness1}%)`;
   const color2 = `hsl(${hue2}, ${saturation}%, ${lightness2}%)`;
   const direction = gradientDirections[Math.floor(Math.random() * gradientDirections.length)];
@@ -192,13 +193,13 @@ function EncouragementPage() {
         style={{backgroundColor: 'rgba(0,0,0,0.2)'}} 
       ></div>
 
-      <h1 className="text-1xl font-bold mt-8 mb-6 text-shadow-lg animate-fade-in-down z-10 opacity-60 select-none pointer-events-none">Hi, 这世界总有人爱你</h1>
-      <div className="flex-1 flex flex-col justify-center items-center w-full">
+      <div className="flex-1 flex flex-col justify-center items-center w-full mt-[-32px]">
         <div className="w-full max-w-xl mx-auto z-10 flex-1 flex flex-col justify-center">
-          <div className="backdrop-blur-md bg-white/10 border border-white/30 rounded-2xl shadow-xl px-8 py-10 flex items-center justify-center min-h-[120px] transition-all duration-300 border-dashed hover:border-solid hover:border-blue-300/60 group">
+          <div className="backdrop-blur-md bg-white/10 border border-white/30 rounded-2xl shadow-xl px-8 py-10 flex flex-col items-center justify-center min-h-[120px] transition-all duration-300 border-dashed hover:border-solid hover:border-blue-300/60 group">
             <p className="text-2xl text-center font-semibold text-shadow-md text-white drop-shadow-lg select-text">
               {quote}
             </p>
+            <span className="mt-4 text-base text-slate-200 opacity-80 font-cursive">May 17, 2025</span>
           </div>
         </div>
       </div>
