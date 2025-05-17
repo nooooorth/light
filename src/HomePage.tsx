@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { PlayCircle } from 'lucide-react'; // Import an icon for the button
 import { useRef, useMemo } from 'react';
 
 function HomePage() {
@@ -47,11 +46,10 @@ function HomePage() {
       <main className="flex flex-col items-center animate-fade-in animation-delay-600 w-full mt-32">
         <Button 
           size="lg" 
-          className="group px-12 py-6 text-2xl font-semibold bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white rounded-full shadow-2xl transform transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-purple-300 focus:ring-opacity-75 flex items-center space-x-4 mb-4"
+          className="group px-12 py-6 text-2xl font-semibold bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white rounded-full shadow-2xl transform transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-purple-300 focus:ring-opacity-75 flex items-center justify-center mb-4"
           onClick={handleStartClick}
         >
-          <PlayCircle size={36} className="transition-transform duration-300 ease-in-out group-hover:rotate-12" />
-          <span>Start</span>
+          开始
         </Button>
       </main>
       <style>{`
