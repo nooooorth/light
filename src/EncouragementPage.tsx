@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getRandomQuote } from './quotes'; // Ensure quotes.ts is also localized
-import { RefreshCw, Share2, Download } from 'lucide-react';
+import { Share2, Download } from 'lucide-react';
 import html2canvas from 'html2canvas';
 
 const gradientDirections = [
@@ -61,10 +61,6 @@ function EncouragementPage() {
   useEffect(() => {
     setQuote(getRandomQuote());
   }, []);
-
-  const handleRefresh = () => {
-    updateQuoteAndBackground();
-  };
 
   const handleShare = async () => {
     const shareData = {
@@ -132,6 +128,34 @@ function EncouragementPage() {
     });
   };
 
+  // --- 新增：滑动和点击切换逻辑 ---
+  // 记录触摸起始位置
+  const touchStartY = useRef<number | null>(null);
+
+  // 触摸开始
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  // 触摸结束，判断滑动方向
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartY.current === null) return;
+    const endY = e.changedTouches[0].clientY;
+    const deltaY = endY - touchStartY.current;
+    if (Math.abs(deltaY) > 40) {
+      // 向上或向下滑动都切换
+      updateQuoteAndBackground();
+    }
+    touchStartY.current = null;
+  };
+
+  // 点击切换
+  const handleMainClick = (e: React.MouseEvent) => {
+    // 避免点击按钮时触发
+    if ((e.target as HTMLElement).closest('.action-bar')) return;
+    updateQuoteAndBackground();
+  };
+
   const commonBackgroundLayerStyle: React.CSSProperties = {
     position: 'absolute',
     inset: '0',
@@ -145,6 +169,9 @@ function EncouragementPage() {
     <div 
       ref={pageRef}
       className="flex flex-col items-center justify-center min-h-screen text-white p-4 relative overflow-hidden animate-page-fade-in"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onClick={handleMainClick}
     >
       <div
         style={{
@@ -177,25 +204,18 @@ function EncouragementPage() {
       </div>
       <div className="flex space-x-4 animate-fade-in-up animation-delay-600 z-10 action-bar mt-auto mb-8">
         <button 
-          onClick={handleRefresh}
-          aria-label="刷新鼓励语和背景"
-          className="p-4 bg-green-500 hover:bg-green-600 active:bg-green-700 text-white font-semibold rounded-full shadow-xl transform transition-all duration-300 ease-in-out hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-green-300 focus:ring-opacity-75"
-        >
-          <RefreshCw size={28} />
-        </button>
-        <button 
           onClick={handleShare}
           aria-label="分享鼓励语"
-          className="p-4 bg-purple-500 hover:bg-purple-600 active:bg-purple-700 text-white font-semibold rounded-full shadow-xl transform transition-all duration-300 ease-in-out hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-opacity-75"
+          className="p-4 bg-transparent text-white font-semibold rounded-full shadow-none transform transition-all duration-300 ease-in-out hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-opacity-75"
         >
-          <Share2 size={28} />
+          <Share2 size={28} color="white" />
         </button>
         <button 
           onClick={handleSaveAsImage}
           aria-label="保存为图片"
-          className="p-4 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-semibold rounded-full shadow-xl transform transition-all duration-300 ease-in-out hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-opacity-75"
+          className="p-4 bg-transparent text-white font-semibold rounded-full shadow-none transform transition-all duration-300 ease-in-out hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-opacity-75"
         >
-          <Download size={28} />
+          <Download size={28} color="white" />
         </button>
       </div>
       <style>

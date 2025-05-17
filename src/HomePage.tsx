@@ -35,27 +35,35 @@ function HomePage() {
 
   return (
     <div ref={bgRef} style={{ background: homeGradient }} className="flex flex-col items-center justify-center min-h-screen text-white px-4 py-8 animate-page-fade-in transition-colors duration-700">
-      <header className="text-center mb-22">
+      <header className="flex flex-col items-center justify-center flex-1 pt-24 mb-0">
         <h1 className="text-6xl font-bold tracking-tight animate-fade-in-down mb-6">
           点  亮
         </h1>
-        <p className="mt-0 text-2xl text-slate-300 animate-fade-in-up animation-delay-300 max-w-xl mx-auto">
-          在每个瞬间，发现一束光
+        <p className="mt-0 text-2xl italic text-slate-300 animate-fade-in-up animation-delay-300 max-w-xl mx-auto font-cursive">
+          Lighting up your day
         </p>
       </header>
-      <main className="flex flex-col items-center animate-fade-in animation-delay-600 w-full mt-32">
+      <main className="flex flex-1 flex-col items-center animate-fade-in animation-delay-600 w-full">
+        <div className="flex-1" />
         <Button 
           size="lg" 
-          className="group px-12 py-6 text-2xl font-semibold bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white rounded-full shadow-2xl transform transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-purple-300 focus:ring-opacity-75 flex items-center justify-center mb-4"
+          className="group px-12 py-6 text-2xl font-semibold bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white rounded-full shadow-2xl transform transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-purple-300 focus:ring-opacity-75 flex items-center justify-center mb-12"
           onClick={handleStartClick}
         >
-          开始
+          Start
         </Button>
       </main>
       <style>{`
         .fade-out-bg {
           opacity: 0;
           transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1);
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+        .font-cursive {
+          font-family: 'Great Vibes', cursive;
+          font-style: italic;
+          letter-spacing: 0.04em;
+          font-weight: 400;
         }
       `}</style>
     </div>
