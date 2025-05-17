@@ -51,7 +51,7 @@ function HomePage() {
           onClick={handleStartClick}
         >
           <PlayCircle size={36} className="transition-transform duration-300 ease-in-out group-hover:rotate-12" />
-          <span>开始</span>
+          <span>Start</span>
         </Button>
       </main>
       <style>{`
