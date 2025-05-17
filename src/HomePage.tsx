@@ -14,9 +14,10 @@ function HomePage() {
   const homeGradient = useMemo(() => {
     const hue1 = Math.floor(Math.random() * 360);
     const hue2 = (hue1 + Math.floor(Math.random() * 120) + 120) % 360;
-    const saturation = Math.floor(Math.random() * 30) + 70;
-    const lightness1 = Math.floor(Math.random() * 20) + 20;
-    const lightness2 = Math.floor(Math.random() * 20) + 30;
+    // 柔和浅色：饱和度 40-60%，亮度 85-95%
+    const saturation = Math.floor(Math.random() * 20) + 40;
+    const lightness1 = Math.floor(Math.random() * 10) + 85;
+    const lightness2 = Math.floor(Math.random() * 10) + 85;
     const color1 = `hsl(${hue1}, ${saturation}%, ${lightness1}%)`;
     const color2 = `hsl(${hue2}, ${saturation}%, ${lightness2}%)`;
     const direction = gradientDirections[Math.floor(Math.random() * gradientDirections.length)];
